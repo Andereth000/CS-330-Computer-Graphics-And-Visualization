@@ -25,7 +25,3 @@ My approach to developing code evolved throughout each milestone because I was f
 
 # How do computational graphics and visualizations give you new knowledge and skills that can be applied in your future educational/professional pathway?
 Learning how to structure a large program with multiple files will definitely be useful in future work. Also, the mathematics and planning that goes into graphics and visualizations will carry over to many different projects that I may have in the future. Another thing that was very helpful is familiarizing myself with the OpenGL documentation and all of the functionality and uses that it has to offer. All of these new techniques will aid me in both the educational and professional pathways.
-<<<<<<< HEAD
-
-=======
->>>>>>> d546a2de7c3bf317b2a9618c741b37e9949aeb48
