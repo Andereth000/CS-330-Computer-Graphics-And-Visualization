@@ -1,0 +1,3 @@
+[submodule "Credenza_OpenGL/Libraries/imgui"]
+	path = Credenza_OpenGL/Libraries/imgui
+	url = https://github.com/ocornut/imgui.git

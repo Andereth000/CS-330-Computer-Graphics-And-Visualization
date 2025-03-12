@@ -30,6 +30,12 @@
     <ClCompile Include="Source\ViewManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Libraries\imgui\imgui.cpp" />
+    <ClCompile Include="..\..\Libraries\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\..\Libraries\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="..\..\Libraries\imgui\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\..\Libraries\imgui\backends\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\..\Libraries\imgui\imgui_tables.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\SceneManager.h">

@@ -3,6 +3,9 @@
 
 #include <GL/glew.h>        // GLEW library
 #include "GLFW/glfw3.h"     // GLFW library
+#include "imgui.h"		  // ImGui library
+#include "backends/imgui_impl_glfw.h" // ImGui GLFW backend
+#include "backends/imgui_impl_opengl3.h" // ImGui OpenGL3 backend
 
 // GLM Math Header inclusions
 #include <glm/glm.hpp>
@@ -35,6 +38,9 @@ namespace
 // need to be pre-declared at the beginning of the source code.
 bool InitializeGLFW();
 bool InitializeGLEW();
+bool InitializeImGui();
+void ShutdownImGui();
+void DrawImGui();
 
 
 /***********************************************************
@@ -62,6 +68,12 @@ int main(int argc, char* argv[])
 
 	// if GLEW fails initialization, then terminate the application
 	if (InitializeGLEW() == false)
+	{
+		return(EXIT_FAILURE);
+	}
+
+	// if ImGui fails initialization, then terminate the application
+	if (InitializeImGui() == false)
 	{
 		return(EXIT_FAILURE);
 	}
@@ -94,11 +106,24 @@ int main(int argc, char* argv[])
 		// refresh the 3D scene
 		g_SceneManager->RenderScene();
 
+		// Begin ImGui frame
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
+		// Draw ImGui elements
+		DrawImGui();
+
+		// Render ImGui
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 		// Flips the the back buffer with the front buffer every frame.
 		glfwSwapBuffers(g_Window);
 
 		// query the latest GLFW events
 		glfwPollEvents();
+
 	}
 
 	// clear the allocated manager objects from memory
@@ -120,6 +145,9 @@ int main(int argc, char* argv[])
 
 	// Terminates the program successfully
 	exit(EXIT_SUCCESS); 
+
+	// Shutdown the ImGui library
+	ShutdownImGui();
 }
 
 /***********************************************************
@@ -174,4 +202,54 @@ bool InitializeGLEW()
 	std::cout << "INFO: OpenGL Version: " << glGetString(GL_VERSION) << "\n" << std::endl;
 
 	return(true);
+}
+
+/***********************************************************
+ *	InitializeImGui()
+ *
+ *  This function is used to initialize the imgui library.
+ ***********************************************************/
+bool InitializeImGui()
+{
+	// Setup Dear ImGui context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+
+	// Setup Platform/Renderer bindings
+	ImGui_ImplGlfw_InitForOpenGL(g_Window, true);
+	ImGui_ImplOpenGL3_Init("#version 130");
+
+	// Display a successful ImGui initialization message
+	std::cout << "INFO: ImGui Successfully Initialized\n";
+
+	return(true);
+}
+
+/***********************************************************
+ *	DrawImGui()
+ *
+ *  This function draws the imgui ui.
+ ***********************************************************/
+void DrawImGui()
+{
+	ImGui::Begin("Test Window");
+	ImGui::Text("Hello, world!");
+	ImGui::End();
+}
+
+/***********************************************************
+ *	ShutdownImGui()
+ *
+ *  This function is used to shutdown the imgui library.
+ ***********************************************************/
+void ShutdownImGui()
+{
+	// Cleanup
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 }
