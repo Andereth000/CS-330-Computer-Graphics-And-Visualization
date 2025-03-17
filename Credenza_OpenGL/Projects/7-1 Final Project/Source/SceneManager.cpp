@@ -427,6 +427,18 @@ void SceneManager::LoadSceneTextures()
  ***********************************************************/
 void SceneManager::DefineObjectMaterials()
 {
+
+	// Default material for all basic meshes in scene
+	OBJECT_MATERIAL defaultMaterial;
+	defaultMaterial.ambientColor = glm::vec3(0.3f, 0.3f, 0.3f);
+	defaultMaterial.ambientStrength = 0.4f;
+	defaultMaterial.diffuseColor = glm::vec3(0.5f, 0.5f, 0.5f);
+	defaultMaterial.specularColor = glm::vec3(0.2f, 0.2f, 0.2f);
+	defaultMaterial.shininess = 16.0;
+	defaultMaterial.tag = "default";
+
+	m_objectMaterials.push_back(defaultMaterial);
+
 	OBJECT_MATERIAL metalMaterial;
 	metalMaterial.ambientColor = glm::vec3(0.2f, 0.2f, 0.2f);
 	metalMaterial.ambientStrength = 0.3f;
@@ -540,13 +552,194 @@ void SceneManager::PrepareScene()
 	// loaded in memory no matter how many times it is drawn
 	// in the rendered 3D scene
 
-
-	m_basicMeshes->LoadPlaneMesh();
-
-	// Load other shapes
+	// Preload all basic meshes
 	m_basicMeshes->LoadBoxMesh(); // Cabinet/Drawers
+	m_basicMeshes->LoadConeMesh(); // Candles
 	m_basicMeshes->LoadCylinderMesh(); // Knobs/Candle Holders
+	m_basicMeshes->LoadPlaneMesh();
+	m_basicMeshes->LoadPrismMesh();
+	m_basicMeshes->LoadPyramid3Mesh();
+	m_basicMeshes->LoadPyramid4Mesh();
+	m_basicMeshes->LoadSphereMesh();
 	m_basicMeshes->LoadTaperedCylinderMesh(); // Vase
+	m_basicMeshes->LoadTorusMesh();
+}
+
+void SceneManager::AddMeshToScene(std::string tag, glm::vec3 position, 
+	glm::vec3 rotation, glm::vec3 scale, 
+	std::string materialTag, std::string textureTag, glm::vec2 uvScale,
+	glm::vec4 shaderColor, std::function<void()> drawFunction)
+{
+
+	MESH_OBJECT newMesh;
+	newMesh.tag = tag;
+	newMesh.position = position;
+	newMesh.rotation = rotation;
+	newMesh.scale = scale;
+	newMesh.materialTag = "default";
+	newMesh.textureTag = textureTag;
+	newMesh.uvScale = uvScale;
+	newMesh.shaderColor = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+	newMesh.drawFunction = drawFunction;
+
+	m_meshes.push_back(newMesh);
+
+}
+
+/***********************************************************
+ *  AddBox()
+ *
+ *  This method is used for adding a box to the scene
+ ***********************************************************/
+void SceneManager::AddBox()
+{
+	AddMeshToScene("box", glm::vec3(0.0f, 0.0f, 0.0f), 
+		glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 
+		"", "", { 1.0f, 1.0f }, { 1.0, 1.0, 1.0, 1.0 }, [this]() { m_basicMeshes->DrawBoxMesh(); });
+}
+
+/***********************************************************
+ *  AddCone()
+ *
+ *  This method is used for adding a cone to the scene
+ ***********************************************************/
+void SceneManager::AddCone()
+{
+	AddMeshToScene("cone", glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f),
+		"", "", { 1.0f, 1.0f }, { 1.0, 1.0, 1.0, 1.0 }, [this]() { m_basicMeshes->DrawConeMesh(); });
+}
+
+/***********************************************************
+ *  AddCylinder()
+ *
+ *  This method is used for adding a cylinder to the scene
+ ***********************************************************/
+void SceneManager::AddCylinder()
+{
+	AddMeshToScene("cylinder", glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f),
+		"", "", { 1.0f, 1.0f }, { 1.0, 1.0, 1.0, 1.0 }, [this]() { m_basicMeshes->DrawCylinderMesh(); });
+}
+
+/***********************************************************
+ *  AddPlane()
+ *
+ *  This method is used for adding a plane to the scene
+ ***********************************************************/
+void SceneManager::AddPlane()
+{
+	AddMeshToScene("plane", glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f),
+		"", "", { 1.0f, 1.0f }, { 1.0, 1.0, 1.0, 1.0 }, [this]() { m_basicMeshes->DrawPlaneMesh(); });
+}
+
+/***********************************************************
+ *  AddPrism()
+ *
+ *  This method is used for adding a prism to the scene
+ ***********************************************************/
+void SceneManager::AddPrism()
+{
+	AddMeshToScene("prism", glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f),
+		"", "", { 1.0f, 1.0f }, { 1.0, 1.0, 1.0, 1.0 }, [this]() { m_basicMeshes->DrawPrismMesh(); });
+}
+
+/***********************************************************
+ *  AddPyramid3()
+ *
+ *  This method is used for adding a pyramid to the scene
+ ***********************************************************/
+void SceneManager::AddPyramid3()
+{
+	AddMeshToScene("pyramid3", glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f),
+		"", "", { 1.0f, 1.0f }, { 1.0, 1.0, 1.0, 1.0 }, [this]() { m_basicMeshes->DrawPyramid3Mesh(); });
+}
+
+/***********************************************************
+ *  AddPyramid4()
+ *
+ *  This method is used for adding a pyramid to the scene
+ ***********************************************************/
+void SceneManager::AddPyramid4()
+{
+	AddMeshToScene("pyramid4", glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f),
+		"", "", { 1.0f, 1.0f }, { 1.0, 1.0, 1.0, 1.0 }, [this]() { m_basicMeshes->DrawPyramid4Mesh(); });
+}
+
+/***********************************************************
+ *  AddSphere()
+ *
+ *  This method is used for adding a sphere to the scene
+ ***********************************************************/
+void SceneManager::AddSphere()
+{
+	AddMeshToScene("sphere", glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f),
+		"", "", { 1.0f, 1.0f }, { 1.0, 1.0, 1.0, 1.0 }, [this]() { m_basicMeshes->DrawSphereMesh(); });
+}
+
+/***********************************************************
+ *  AddTaperedCylinder()
+ *
+ *  This method is used for adding a tapered cylinder to the scene
+ ***********************************************************/
+void SceneManager::AddTaperedCylinder()
+{
+	AddMeshToScene("tapered cylinder", glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f),
+		"", "", { 1.0f, 1.0f }, { 1.0, 1.0, 1.0, 1.0 }, [this]() { m_basicMeshes->DrawTaperedCylinderMesh(); });
+}
+
+/***********************************************************
+ *  AddTorus()
+ *
+ *  This method is used for adding a torus to the scene
+ ***********************************************************/
+void SceneManager::AddTorus()
+{
+	AddMeshToScene("torus", glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f),
+		"", "", { 1.0f, 1.0f }, { 1.0, 1.0, 1.0, 1.0 }, [this]() { m_basicMeshes->DrawTorusMesh(); });
+}
+
+/***********************************************************
+ *  RenderMeshes()
+ *
+ *  This method is used for rendering all the basic meshes in the scene.
+ ***********************************************************/
+void SceneManager::RenderMeshes()
+{
+	// Loop through all the meshes in the scene and render them
+	for (const auto& mesh : m_meshes)
+	{
+		SetTransformations(mesh.scale, mesh.rotation.x, mesh.rotation.y, mesh.rotation.z, mesh.position);
+		SetShaderMaterial(mesh.materialTag);
+		SetShaderTexture(mesh.textureTag);
+		SetTextureUVScale(mesh.uvScale.x, mesh.uvScale.y);
+		SetShaderColor(mesh.shaderColor.r, mesh.shaderColor.g, mesh.shaderColor.b, mesh.shaderColor.a);
+		
+		if (mesh.drawFunction)
+		{
+			mesh.drawFunction();
+		}
+	}
+}
+
+/***********************************************************
+ *  RemoveMesh()
+ *
+ *  This method is used for removing a mesh from the scene
+ ***********************************************************/
+void SceneManager::RemoveMesh(int index)
+{
+	if (index >= 0 && index < m_meshes.size())
+	{
+		m_meshes.erase(m_meshes.begin() + index);
+	}
 }
 
 /***********************************************************
@@ -557,6 +750,7 @@ void SceneManager::PrepareScene()
  ***********************************************************/
 void SceneManager::RenderScene()
 {
+
 	RenderBackdrop();
 	RenderFloor();
 	RenderPictureFrame();
@@ -570,7 +764,11 @@ void SceneManager::RenderScene()
 	RenderDrawers();
 	RenderDoors();
 	RenderKnobs();
+
+	// Allow rendering of all basic meshes
+	RenderMeshes();
 }
+
 
 /***********************************************************
  *  RenderBackrop()

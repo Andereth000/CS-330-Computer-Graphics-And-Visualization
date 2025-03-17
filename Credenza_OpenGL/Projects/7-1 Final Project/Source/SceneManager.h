@@ -14,6 +14,7 @@
 
 #include <string>
 #include <vector>
+#include <functional>
 
 /***********************************************************
  *  SceneManager
@@ -28,6 +29,30 @@ public:
 	SceneManager(ShaderManager *pShaderManager);
 	// destructor
 	~SceneManager();
+
+	// The following methods are for the students to 
+	// customize for their own 3D scene
+	void DefineObjectMaterials();
+	void SetupSceneLights();
+	void PrepareScene();
+	void RenderScene();
+
+	void LoadSceneTextures();
+
+	// Seperate scene components into different methods with unique values
+	void RenderKnobs();
+	void RenderFloor();
+	void RenderPictureFrame();
+	void RenderVase();
+	void RenderVaseBase();
+	void RenderCandleHolders();
+	void RenderCandles();
+	void RenderCandleWicks();
+	void RenderDoors();
+	void RenderDrawers();
+	void RenderNegativeSpace();
+	void RenderBackdrop();
+	void RenderCredenza();
 
 	struct TEXTURE_INFO
 	{
@@ -44,6 +69,51 @@ public:
 		float shininess;
 		std::string tag;
 	};
+
+	// Mesh object structure to hold properties for each mesh
+	struct MESH_OBJECT
+	{
+		std::string tag;
+		glm::vec3 rotation;
+		glm::vec3 position;
+		glm::vec3 scale;
+		std::string materialTag;
+		std::string textureTag;
+		glm::vec2 uvScale;
+		glm::vec4 shaderColor;
+		std::function<void()> drawFunction;
+	};
+
+	// Add meshs to scene with various properties
+	void AddMeshToScene(std::string tag, glm::vec3 position, glm::vec3 rotation, 
+		glm::vec3 scale, std::string materialTag, 
+		std::string textureTag, glm::vec2 uvScale,
+		glm::vec4 shaderColor, std::function<void()> drawFunction);
+	void AddBox();
+	void AddCone();
+	void AddCylinder();
+	void AddPlane();
+	void AddPrism();
+	void AddPyramid3();
+	void AddPyramid4();
+	void AddSphere();
+	void AddTaperedCylinder();
+	void AddTorus();
+
+	// Render all the meshes in the scene
+	void RenderMeshes();
+
+	// Getters for the meshes
+	int GetNumMeshes() { return m_meshes.size(); }
+
+	// Get a specific mesh object by index
+	MESH_OBJECT& GetMesh(int index) { return m_meshes[index]; }
+
+	// Remove a mesh object from the scene by index
+	void RemoveMesh(int index);
+
+	// List of mesh objects to be rendered in the scene
+	std::vector<MESH_OBJECT> m_meshes;
 
 private:
 	// pointer to shader manager object
@@ -96,31 +166,5 @@ private:
 	// set the object material into the shader
 	void SetShaderMaterial(
 		std::string materialTag);
-
-public:
-
-	// The following methods are for the students to 
-	// customize for their own 3D scene
-	void DefineObjectMaterials();
-	void SetupSceneLights();
-	void PrepareScene();
-	void RenderScene();
-
-	void LoadSceneTextures();
-
-	// Seperate scene components into different methods with unique values
-	void RenderKnobs();
-	void RenderFloor();
-	void RenderPictureFrame();
-	void RenderVase();
-	void RenderVaseBase();
-	void RenderCandleHolders();
-	void RenderCandles();
-	void RenderCandleWicks();
-	void RenderDoors();
-	void RenderDrawers();
-	void RenderNegativeSpace();
-	void RenderBackdrop();
-	void RenderCredenza();
 
 };

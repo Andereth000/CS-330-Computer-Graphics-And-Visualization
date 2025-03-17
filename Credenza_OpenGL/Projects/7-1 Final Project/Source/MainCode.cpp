@@ -21,7 +21,7 @@
 namespace
 {
 	// Macro for window title
-	const char* const WINDOW_TITLE = "7-1 FinalProject and Milestones"; 
+	const char* const WINDOW_TITLE = "Credenza OpenGL"; 
 
 	// Main GLFW window
 	GLFWwindow* g_Window = nullptr;
@@ -41,6 +41,8 @@ bool InitializeGLEW();
 bool InitializeImGui();
 void ShutdownImGui();
 void DrawImGui();
+
+int curMeshIndex = -1;
 
 
 /***********************************************************
@@ -236,9 +238,123 @@ bool InitializeImGui()
  ***********************************************************/
 void DrawImGui()
 {
-	ImGui::Begin("Test Window");
-	ImGui::Text("Hello, world!");
+	ImGui::Begin("Scene Objects");
+
+	if (ImGui::CollapsingHeader("Meshes"))
+	{
+		if (ImGui::Button("Add Box"))
+		{
+			g_SceneManager->AddBox();
+		}
+		if (ImGui::Button("Add Cone"))
+		{
+			g_SceneManager->AddCone();
+		}
+		if (ImGui::Button("Add Cylinder"))
+		{
+			g_SceneManager->AddCylinder();
+		}
+		if (ImGui::Button("Add Plane"))
+		{
+			g_SceneManager->AddPlane();
+		}
+		if (ImGui::Button("Add Prism"))
+		{
+			g_SceneManager->AddPrism();
+		}
+		if (ImGui::Button("Add Pyramid 3"))
+		{
+			g_SceneManager->AddPyramid3();
+		}
+		if (ImGui::Button("Add Pyramid 4"))
+		{
+			g_SceneManager->AddPyramid4();
+		}
+		if (ImGui::Button("Add Sphere"))
+		{
+			g_SceneManager->AddSphere();
+		}
+		if (ImGui::Button("Add Tapered Cylinder"))
+		{
+			g_SceneManager->AddTaperedCylinder();
+		}
+		if (ImGui::Button("Add Torus"))
+		{
+			g_SceneManager->AddTorus();
+		}
+	}
+
+	if (g_SceneManager->GetNumMeshes() > 0)
+	{
+		ImGui::Separator();
+		ImGui::Text("Edit Mesh Transform");
+
+		// Select which mesh to edit
+		ImGui::SliderInt("Selected Mesh", &curMeshIndex, 0, g_SceneManager->GetNumMeshes() - 1);
+
+		if (curMeshIndex >= 0 && curMeshIndex < g_SceneManager->GetNumMeshes())
+		{
+			SceneManager::MESH_OBJECT& mesh = g_SceneManager->GetMesh(curMeshIndex);
+
+			// Position Controls
+			ImGui::DragFloat3("Position", &mesh.position.x, 0.1f, -10.0f, 10.0f);
+
+			// Rotation Controls
+			ImGui::DragFloat3("Rotation", &mesh.rotation.x, 1.0f, -180.0f, 180.0f);
+
+			// Scale Controls
+			ImGui::DragFloat3("Scale", &mesh.scale.x, 0.1f, 0.1f, 5.0f);
+
+			// Material Controls
+			ImGui::Text("Material");
+
+			// To wire InputText() with std::string or any other custom string type,
+			// see the "Text Input > Resize Callback" section of this demo, and the misc/cpp/imgui_stdlib.h file.
+			// (Reference: https://github.com/ocornut/imgui/blob/master/imgui_demo.cpp)
+			static char materialTag[64];
+			strncpy_s(materialTag, mesh.materialTag.c_str(), sizeof(materialTag) - 1);
+			materialTag[sizeof(materialTag) - 1] = '\0';
+
+			if (ImGui::InputText("Material##", materialTag, sizeof(materialTag)))
+			{
+				mesh.materialTag = std::string(materialTag);
+			}
+
+			// Texture Controls
+			/*ImGui::Text("Texture");
+			
+			// To wire InputText() with std::string or any other custom string type,
+			// see the "Text Input > Resize Callback" section of this demo, and the misc/cpp/imgui_stdlib.h file.
+			// (Reference: https://github.com/ocornut/imgui/blob/master/imgui_demo.cpp)
+			static char textureTag[64];
+			strncpy_s(textureTag, mesh.textureTag.c_str(), sizeof(textureTag) - 1);
+			textureTag[sizeof(textureTag) - 1] = '\0';
+
+			if (ImGui::InputText("Texture##", textureTag, sizeof(textureTag)))
+			{
+				mesh.textureTag = std::string(textureTag);
+			}*/
+
+			// UV Scale Controls
+			ImGui::Text("UV Scale");
+			ImGui::DragFloat2("UV Scale##", &mesh.uvScale.x, 0.1f, 0.1f, 10.0f);
+
+			// Shader Color Controls
+			ImGui::Text("Shader Color");
+			ImGui::ColorEdit4("Shader Color##", &mesh.shaderColor.r);
+			
+		}
+
+		// Delete Mesh
+		if (ImGui::Button("Delete Mesh"))
+		{
+			g_SceneManager->RemoveMesh(curMeshIndex);
+			curMeshIndex = std::max(0, curMeshIndex - 1);
+		}
+	}
+
 	ImGui::End();
+
 }
 
 /***********************************************************
