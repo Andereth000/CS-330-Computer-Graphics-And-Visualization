@@ -364,6 +364,15 @@ void DrawImGui()
 		}
 	}
 
+	// Camera Control Instructions
+	ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Camera Controls");
+	ImGui::Text("W/A/S/D - Move");
+	ImGui::Text("Q/E - Down/Up");
+	ImGui::Text("RMB - Look Around");
+	ImGui::Text("Scroll Wheel - Increase/Decrease Flight Speed");
+	ImGui::Text("O - Orthographic");
+	ImGui::Text("P - Perspective");
+
 	ImGui::End();
 
 }
