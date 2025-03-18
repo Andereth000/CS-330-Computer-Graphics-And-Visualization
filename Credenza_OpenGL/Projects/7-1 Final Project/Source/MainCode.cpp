@@ -1,3 +1,14 @@
+///////////////////////////////////////////////////////////////////////////////
+// MainCode.cpp
+// ============
+// initializes the GLFW, GLEW, and ImGui libraries for OpenGL rendering.
+//
+//  AUTHOR: Brian Battersby - SNHU Instructor / Computer Science
+//	Created for CS-330-Computational Graphics and Visualization, Nov. 1st, 2023
+// 
+//  EDITORS:  Ethan Anderson - SNHU Student / Computer Science
+///////////////////////////////////////////////////////////////////////////////
+
 #include <iostream>         // error handling and output
 #include <cstdlib>          // EXIT_FAILURE
 

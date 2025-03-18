@@ -5,6 +5,8 @@
 //
 //  AUTHOR: Brian Battersby - SNHU Instructor / Computer Science
 //	Created for CS-330-Computational Graphics and Visualization, Nov. 1st, 2023
+// 
+//  EDITORS:  Ethan Anderson - SNHU Student / Computer Science
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "SceneManager.h"

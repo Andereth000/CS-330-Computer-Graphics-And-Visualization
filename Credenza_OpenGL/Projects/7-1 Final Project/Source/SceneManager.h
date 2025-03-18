@@ -5,6 +5,8 @@
 //
 //  AUTHOR: Brian Battersby - SNHU Instructor / Computer Science
 //	Created for CS-330-Computational Graphics and Visualization, Nov. 1st, 2023
+// 
+//  EDITORS:  Ethan Anderson - SNHU Student / Computer Science
 ///////////////////////////////////////////////////////////////////////////////
 
 #pragma once
@@ -89,6 +91,8 @@ public:
 		glm::vec3 scale, std::string materialTag, 
 		std::string textureTag, glm::vec2 uvScale,
 		glm::vec4 shaderColor, std::function<void()> drawFunction);
+
+	// Add basic shapes to the scene with unique properties
 	void AddBox();
 	void AddCone();
 	void AddCylinder();
