@@ -745,6 +745,26 @@ void SceneManager::RemoveMesh(int index)
 }
 
 /***********************************************************
+ *  LoadModel()
+ *
+ *  This method is used for loading a 3D model from a file using Assimp
+ ***********************************************************/
+void SceneManager::LoadModel(std::string filename, std::string tag, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+{
+	Assimp::Importer importer;
+	const aiScene* scene = importer.ReadFile(filename, aiProcess_Triangulate | aiProcess_FlipUVs);
+	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+	{
+		std::cerr << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
+		return;
+	}
+
+	std::function<void()> drawFn = [scene]() {};
+
+	AddMeshToScene(tag, position, rotation, scale, "default", "", glm::vec2(1.0f, 1.0f), glm::vec4(1.0), drawFn);
+}
+
+/***********************************************************
  *  RenderScene()
  *
  *  This method is used for rendering the 3D scene by 

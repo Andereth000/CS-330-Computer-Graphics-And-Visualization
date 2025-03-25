@@ -18,6 +18,11 @@
 #include <vector>
 #include <functional>
 
+// Assimp library for loading 3D models
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 /***********************************************************
  *  SceneManager
  *
@@ -118,6 +123,8 @@ public:
 
 	// List of mesh objects to be rendered in the scene
 	std::vector<MESH_OBJECT> m_meshes;
+
+	void LoadModel(std::string filename, std::string tag, glm::vec3 position, glm::vec3 rotation,glm::vec3 scale);
 
 private:
 	// pointer to shader manager object
