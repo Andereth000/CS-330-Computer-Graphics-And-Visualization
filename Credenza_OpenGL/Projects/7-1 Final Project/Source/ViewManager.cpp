@@ -1,10 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////////
-// viewmanager.h
+// ViewManager.cpp
 // ============
 // manage the viewing of 3D objects within the viewport
 //
 //  AUTHOR: Brian Battersby - SNHU Instructor / Computer Science
 //	Created for CS-330-Computational Graphics and Visualization, Nov. 1st, 2023
+// 
+//  EDITORS:  Ethan Anderson - SNHU Student / Computer Science
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "ViewManager.h"
@@ -18,8 +20,8 @@
 namespace
 {
 	// Variables for window width and height
-	const int WINDOW_WIDTH = 1280;
-	const int WINDOW_HEIGHT = 720;
+	const int WINDOW_WIDTH = 1920;
+	const int WINDOW_HEIGHT = 1080;
 	const char* g_ViewName = "view";
 	const char* g_ProjectionName = "projection";
 
@@ -54,12 +56,11 @@ ViewManager::ViewManager(
 	m_pWindow = NULL;
 	g_pCamera = new Camera();
 	// default camera view parameters
-	g_pCamera->Position = glm::vec3(0.0f, 5.0f, 12.0f);
+	g_pCamera->Position = glm::vec3(0.2f, 5.0f, 18.0f);
 	g_pCamera->Front = glm::vec3(0.0f, -0.5f, -2.0f);
 	g_pCamera->Up = glm::vec3(0.0f, 1.0f, 0.0f);
 	g_pCamera->Zoom = 80;
 }
-
 /***********************************************************
  *  ~ViewManager()
  *

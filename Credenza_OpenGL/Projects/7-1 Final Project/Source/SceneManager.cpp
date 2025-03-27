@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// shadermanager.cpp
+// SceneManager.cpp
 // ============
 // manage the loading and rendering of 3D scenes
 //
@@ -7,6 +7,8 @@
 //	Created for CS-330-Computational Graphics and Visualization, Nov. 1st, 2023
 // 
 //  EDITORS:  Ethan Anderson - SNHU Student / Computer Science
+// 
+//  Assimp implementation adapted from learnopengl.com and Assimp documentation. Function references included in comments.
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "SceneManager.h"
@@ -716,8 +718,15 @@ void SceneManager::AddTorus()
 void SceneManager::RenderMeshes()
 {
 	// Loop through all the meshes in the scene and render them
-	for (const auto& mesh : m_meshes)
+	for (auto& mesh : m_meshes)
 	{
+		// Infinite rotation toggle
+		if (isRotating)
+		{
+		mesh.rotation.y += 0.2f;
+		if (mesh.rotation.y > 360.0f) mesh.rotation.y -= 360.0f;
+		}
+
 		SetTransformations(mesh.scale, mesh.rotation.x, mesh.rotation.y, mesh.rotation.z, mesh.position);
 		SetShaderMaterial(mesh.materialTag);
 		SetShaderTexture(mesh.textureTag);
@@ -747,21 +756,120 @@ void SceneManager::RemoveMesh(int index)
 /***********************************************************
  *  LoadModel()
  *
- *  This method is used for loading a 3D model from a file using Assimp
+ *  This method is used for loading a 3D model from a file using Assimp.
+ *  Adapted from https://learnopengl.com/Model-Loading/Model
+ *  and https://assimp-docs.readthedocs.io/en/latest/
  ***********************************************************/
 void SceneManager::LoadModel(std::string filename, std::string tag, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 {
 	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(filename, aiProcess_Triangulate | aiProcess_FlipUVs);
+
+	// aiProcess_GenSmoothNormals to fix teapot missing normals
+	const aiScene* scene = importer.ReadFile(filename, aiProcess_Triangulate | aiProcess_FlipUVs| aiProcess_GenSmoothNormals);
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
 		std::cerr << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
 		return;
 	}
 
-	std::function<void()> drawFn = [scene]() {};
+	ProcessNode(scene->mRootNode, scene, tag, position, rotation, scale);
+}
 
-	AddMeshToScene(tag, position, rotation, scale, "default", "", glm::vec2(1.0f, 1.0f), glm::vec4(1.0), drawFn);
+/***********************************************************
+ *  ProcessNode()
+ *
+ *  This method is used for processing a node in the 3D model.
+ *  Adapted from https://learnopengl.com/Model-Loading/Model
+ *  and https://assimp-docs.readthedocs.io/en/latest/
+ ***********************************************************/
+void SceneManager::ProcessNode(aiNode* node, const aiScene* scene, std::string tag, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+{
+	for (unsigned int i = 0; i < node->mNumMeshes; i++)
+	{
+		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+		ProcessMesh(mesh, scene, tag + std::to_string(i), position, rotation, scale);
+	}
+
+	for (unsigned int i = 0; i < node->mNumChildren; i++)
+	{
+		ProcessNode(node->mChildren[i], scene, tag, position, rotation, scale);
+	}
+}
+
+/***********************************************************
+ *  ProcessMesh()
+ *
+ *  This method is used for processing meshes in the 3D model (without textures).
+ *  Adapted from https://learnopengl.com/Model-Loading/Model
+ *  and https://learnopengl.com/Model-Loading/Mesh
+ *  and https://assimp-docs.readthedocs.io/en/latest/
+ ***********************************************************/
+void SceneManager::ProcessMesh(aiMesh* mesh, const aiScene* scene, std::string tag, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+{
+	std::vector<float> vertices;
+	std::vector<unsigned int> indices;
+
+	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+	{
+		vertices.push_back(mesh->mVertices[i].x);
+		vertices.push_back(mesh->mVertices[i].y);
+		vertices.push_back(mesh->mVertices[i].z);
+
+		if (mesh->HasNormals())
+		{
+			vertices.push_back(mesh->mNormals[i].x);
+			vertices.push_back(mesh->mNormals[i].y);
+			vertices.push_back(mesh->mNormals[i].z);
+		}
+		else
+		{
+			vertices.push_back(0.0f);
+			vertices.push_back(0.0f);
+			vertices.push_back(0.0f);
+		}
+	}
+
+	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+	{
+		aiFace face = mesh->mFaces[i];
+		for (unsigned int j = 0; j < face.mNumIndices; j++)
+			indices.push_back(face.mIndices[j]);
+	}
+
+	// Initialize buffers
+	GLuint VAO, VBO, EBO;
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+
+	glBindVertexArray(VAO);
+
+	// Bind vertex buffer
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+
+	// Bind element buffer
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
+
+	// Position (stride of 6 without texture coordinates)
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	// Normal (stride of 6 without texture coordinates)
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	glBindVertexArray(0);
+
+	// Create a draw function for the mesh
+	std::function<void()> drawFunction = [VAO, indices]() {
+		glBindVertexArray(VAO);
+		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
+		};
+
+	// Add the mesh to the scene
+	AddMeshToScene(tag, position, rotation, scale, "default", "", glm::vec2(1.0f, 1.0f), glm::vec4(1.0f), drawFunction);
 }
 
 /***********************************************************

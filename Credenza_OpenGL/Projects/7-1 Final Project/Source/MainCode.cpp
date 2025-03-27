@@ -101,8 +101,6 @@ int main(int argc, char* argv[])
 	g_SceneManager = new SceneManager(g_ShaderManager);
 	g_SceneManager->PrepareScene();
 
-	g_SceneManager->LoadModel("../../Models/bunny.obj", "Stanford Bunny", glm::vec3(0.0f, 5.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-
 	// loop will keep running until the application is closed 
 	// or until an error has occurred
 	while (!glfwWindowShouldClose(g_Window))
@@ -297,6 +295,26 @@ void DrawImGui()
 		}
 	}
 
+	if (ImGui::CollapsingHeader("Models"))
+	{
+		if (ImGui::Button("Stanford Bunny"))
+		{
+			g_SceneManager->LoadModel("../../Models/bunny.obj", "Stanford Bunny", glm::vec3(0.2f, 3.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+		}
+		if (ImGui::Button("Lucy"))
+		{
+			g_SceneManager->LoadModel("../../Models/lucy.obj", "Lucy", glm::vec3(0.2f, 3.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.5f, 1.5f, 1.5f));
+		}
+		if (ImGui::Button("Teapot"))
+		{
+			g_SceneManager->LoadModel("../../Models/teapot.obj", "Teapot", glm::vec3(0.2f, 3.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+		}
+		if (ImGui::Button("Suzanne"))
+		{
+			g_SceneManager->LoadModel("../../Models/suzanne.obj", "Suzanne", glm::vec3(0.2f, 4.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.5f, 1.5f, 1.5f));
+		}
+	}
+
 	if (g_SceneManager->GetNumMeshes() > 0)
 	{
 		ImGui::Separator();
@@ -357,6 +375,9 @@ void DrawImGui()
 			ImGui::ColorEdit4("Shader Color##", &mesh.shaderColor.r);
 			
 		}
+
+		//Mesh Rotation Toggle
+		ImGui::Checkbox("Toggle Rotation", &g_SceneManager->isRotating);
 
 		// Delete Mesh
 		if (ImGui::Button("Delete Mesh"))

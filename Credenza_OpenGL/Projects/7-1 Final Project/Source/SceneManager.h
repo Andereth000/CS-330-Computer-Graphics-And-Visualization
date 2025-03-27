@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// shadermanager.h
+// SceneManager.h
 // ============
 // manage the loading and rendering of 3D scenes
 //
@@ -7,6 +7,8 @@
 //	Created for CS-330-Computational Graphics and Visualization, Nov. 1st, 2023
 // 
 //  EDITORS:  Ethan Anderson - SNHU Student / Computer Science
+// 
+//  Assimp implementation adapted from learnopengl.com and Assimp documentation. Function references included in comments.
 ///////////////////////////////////////////////////////////////////////////////
 
 #pragma once
@@ -89,6 +91,7 @@ public:
 		glm::vec2 uvScale;
 		glm::vec4 shaderColor;
 		std::function<void()> drawFunction;
+		bool isRotating = false;
 	};
 
 	// Add meshs to scene with various properties
@@ -124,7 +127,13 @@ public:
 	// List of mesh objects to be rendered in the scene
 	std::vector<MESH_OBJECT> m_meshes;
 
+	// Load a 3D model from a file and process its meshes
 	void LoadModel(std::string filename, std::string tag, glm::vec3 position, glm::vec3 rotation,glm::vec3 scale);
+	void ProcessNode(aiNode* node, const aiScene* scene, std::string tag, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
+	void ProcessMesh(aiMesh* mesh, const aiScene* scene, std::string tag, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
+
+	// Infinite rotation boolean
+	bool isRotating = false;
 
 private:
 	// pointer to shader manager object
