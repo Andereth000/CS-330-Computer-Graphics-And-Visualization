@@ -580,10 +580,10 @@ void SceneManager::AddMeshToScene(std::string tag, glm::vec3 position,
 	newMesh.position = position;
 	newMesh.rotation = rotation;
 	newMesh.scale = scale;
-	newMesh.materialTag = "default";
+	newMesh.materialTag = materialTag;
 	newMesh.textureTag = textureTag;
 	newMesh.uvScale = uvScale;
-	newMesh.shaderColor = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+	newMesh.shaderColor = shaderColor;
 	newMesh.drawFunction = drawFunction;
 
 	m_meshes.push_back(newMesh);
@@ -760,7 +760,11 @@ void SceneManager::RemoveMesh(int index)
  *  Adapted from https://learnopengl.com/Model-Loading/Model
  *  and https://assimp-docs.readthedocs.io/en/latest/
  ***********************************************************/
-void SceneManager::LoadModel(std::string filename, std::string tag, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+void SceneManager::LoadModel(std::string filename, std::string tag,
+	glm::vec3 position, glm::vec3 rotation,
+	glm::vec3 scale, std::string materialTag,
+	std::string textureTag, glm::vec2 uvScale,
+	glm::vec4 shaderColor, bool isRotating)
 {
 	Assimp::Importer importer;
 
@@ -772,7 +776,12 @@ void SceneManager::LoadModel(std::string filename, std::string tag, glm::vec3 po
 		return;
 	}
 
-	ProcessNode(scene->mRootNode, scene, tag, position, rotation, scale);
+	ProcessNode(scene->mRootNode, scene, 
+		tag, position, 
+		rotation, scale, 
+		materialTag, textureTag, 
+		uvScale, shaderColor, 
+		isRotating);
 }
 
 /***********************************************************
@@ -782,17 +791,33 @@ void SceneManager::LoadModel(std::string filename, std::string tag, glm::vec3 po
  *  Adapted from https://learnopengl.com/Model-Loading/Model
  *  and https://assimp-docs.readthedocs.io/en/latest/
  ***********************************************************/
-void SceneManager::ProcessNode(aiNode* node, const aiScene* scene, std::string tag, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+void SceneManager::ProcessNode(aiNode* node, const aiScene* scene, 
+	std::string tag, glm::vec3 position, 
+	glm::vec3 rotation, glm::vec3 scale, 
+	std::string materialTag, std::string textureTag, 
+	glm::vec2 uvScale, glm::vec4 shaderColor, 
+	bool isRotating)
 {
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
 	{
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		ProcessMesh(mesh, scene, tag + std::to_string(i), position, rotation, scale);
+		std::string meshTag = tag + std::to_string(i);
+		ProcessMesh(mesh, scene, 
+			tag + std::to_string(i), position, 
+			rotation, scale, 
+			materialTag, textureTag,
+			uvScale, shaderColor,
+			isRotating);
 	}
 
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
-		ProcessNode(node->mChildren[i], scene, tag, position, rotation, scale);
+		ProcessNode(node->mChildren[i], scene, 
+			tag, position, 
+			rotation, scale,
+			materialTag, textureTag,
+			uvScale, shaderColor,
+			isRotating);
 	}
 }
 
@@ -804,7 +829,11 @@ void SceneManager::ProcessNode(aiNode* node, const aiScene* scene, std::string t
  *  and https://learnopengl.com/Model-Loading/Mesh
  *  and https://assimp-docs.readthedocs.io/en/latest/
  ***********************************************************/
-void SceneManager::ProcessMesh(aiMesh* mesh, const aiScene* scene, std::string tag, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+void SceneManager::ProcessMesh(aiMesh* mesh, const aiScene* scene, 
+	std::string tag, glm::vec3 position, 
+	glm::vec3 rotation, glm::vec3 scale,
+	std::string materialTag, std::string textureTag, 
+	glm::vec2 uvScale, glm::vec4 shaderColor, bool isRotating)
 {
 	std::vector<float> vertices;
 	std::vector<unsigned int> indices;
@@ -869,7 +898,119 @@ void SceneManager::ProcessMesh(aiMesh* mesh, const aiScene* scene, std::string t
 		};
 
 	// Add the mesh to the scene
-	AddMeshToScene(tag, position, rotation, scale, "default", "", glm::vec2(1.0f, 1.0f), glm::vec4(1.0f), drawFunction);
+	AddMeshToScene(tag, position, 
+		rotation, scale, 
+		materialTag, textureTag, 
+		uvScale, shaderColor, 
+		drawFunction);
+	m_meshes.back().isRotating = isRotating;
+}
+
+/***********************************************************
+ *  SerializeSceneData()
+ *
+ *  This method is used for saving scene data to a file
+ ***********************************************************/
+void SceneManager::SerializeSceneData(std::string filename)
+{
+	json jScene;
+
+	for (auto& mesh : m_meshes)
+	{
+		json jMesh;
+		jMesh["tag"] = mesh.tag;
+		jMesh["position"] = { mesh.position.x, mesh.position.y, mesh.position.z };
+		jMesh["rotation"] = { mesh.rotation.x, mesh.rotation.y, mesh.rotation.z };
+		jMesh["scale"] = { mesh.scale.x, mesh.scale.y, mesh.scale.z };
+		jMesh["materialTag"] = mesh.materialTag;
+		jMesh["textureTag"] = mesh.textureTag;
+		jMesh["uvScale"] = { mesh.uvScale.x, mesh.uvScale.y };
+		jMesh["shaderColor"] = { mesh.shaderColor.r, mesh.shaderColor.g, mesh.shaderColor.b, mesh.shaderColor.a };
+		jMesh["isRotating"] = mesh.isRotating;
+
+		jScene.push_back(jMesh);
+
+	}
+	std::ofstream file(filename);
+
+	// Better JSON formatting
+	file << jScene.dump(4);
+
+	file.close();
+}
+
+ /***********************************************************
+  *  DeserializeSceneData()
+  *
+  *  This method is used for loading scene data from a file
+  ***********************************************************/
+void SceneManager::DeserializeSceneData(std::string filename)
+{
+	std::ifstream file(filename);
+	if (!file.is_open())
+	{
+		std::cerr << "Could not open file: " << filename << std::endl;
+		return;
+	}
+
+	json jScene;
+	file >> jScene;
+	file.close();
+
+	m_meshes.clear();
+
+	for (auto& jMesh : jScene)
+	{
+		// Retrieve model data
+		std::string tag = jMesh["tag"];
+		glm::vec3 position(jMesh["position"][0], jMesh["position"][1], jMesh["position"][2]);
+		glm::vec3 rotation(jMesh["rotation"][0], jMesh["rotation"][1], jMesh["rotation"][2]);
+		glm::vec3 scale(jMesh["scale"][0], jMesh["scale"][1], jMesh["scale"][2]);
+		std::string materialTag = jMesh["materialTag"];
+		std::string textureTag = jMesh["textureTag"];
+		glm::vec2 uvScale(jMesh["uvScale"][0], jMesh["uvScale"][1]);
+		glm::vec4 shaderColor(jMesh["shaderColor"][0], jMesh["shaderColor"][1], jMesh["shaderColor"][2], jMesh["shaderColor"][3]);
+		bool isRotating = jMesh["isRotating"];
+
+		// Handle re-drawing models
+		if (tag.find("Stanford Bunny") != std::string::npos)
+		{
+			LoadModel("../../Models/bunny.obj", tag, 
+				position, rotation, 
+				scale, materialTag, 
+				textureTag, uvScale,
+				shaderColor, isRotating);
+			continue;
+		}
+		if (tag.find("Teapot") != std::string::npos)
+		{
+			LoadModel("../../Models/teapot.obj", tag,
+				position, rotation,
+				scale, materialTag,
+				textureTag, uvScale,
+				shaderColor, isRotating);
+			continue;
+		}
+		if (tag.find("Lucy") != std::string::npos)
+		{
+			LoadModel("../../Models/lucy.obj", tag,
+				position, rotation,
+				scale, materialTag,
+				textureTag, uvScale,
+				shaderColor, isRotating);
+			continue;
+		}
+		if (tag.find("Suzanne") != std::string::npos)
+		{
+			LoadModel("../../Models/suzanne.obj", tag,
+				position, rotation,
+				scale, materialTag,
+				textureTag, uvScale,
+				shaderColor, isRotating);
+			continue;
+		}
+
+	}
 }
 
 /***********************************************************

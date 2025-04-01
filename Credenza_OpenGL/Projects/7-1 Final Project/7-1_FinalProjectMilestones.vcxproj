@@ -66,7 +66,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\Libraries\GLFW\include;..\..\Libraries\GLEW\include;..\..\Libraries\glm;..\..\Utilities;..\..\3DShapes;%(AdditionalIncludeDirectories);..\..\Libraries\imgui;..\..\Libraries\imgui;..\..\Libraries\imgui\backends;..\..\Libraries\assimp\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\Libraries\nlohmann;..\..\Libraries\GLFW\include;..\..\Libraries\GLEW\include;..\..\Libraries\glm;..\..\Utilities;..\..\3DShapes;..\..\Libraries\nlohmann%(AdditionalIncludeDirectories);..\..\Libraries\imgui;..\..\Libraries\imgui;..\..\Libraries\imgui\backends;..\..\Libraries\assimp\include;..\..\Libraries\nlohmann;..\..\Libraries\nlohmann\include;..\..\Libraries\nlohmann\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -84,7 +84,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\Libraries\GLFW\include;..\..\Libraries\GLEW\include;..\..\Libraries\glm;..\..\Utilities;..\..\3DShapes;..\..\Libraries\imgui;..\..\Libraries\imgui;%(AdditionalIncludeDirectories);..\..\Libraries\imgui;..\..\Libraries\imgui;..\..\Libraries\imgui\backends;..\..\Libraries\assimp\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\Libraries\nlohmann;..\..\Libraries\GLFW\include;..\..\Libraries\GLEW\include;..\..\Libraries\glm;..\..\Utilities;..\..\3DShapes;..\..\Libraries\nlohmann..\..\Libraries\imgui;..\..\Libraries\imgui;%(AdditionalIncludeDirectories);..\..\Libraries\imgui;..\..\Libraries\imgui;..\..\Libraries\imgui\backends;..\..\Libraries\assimp\include;..\..\Libraries\nlohmann;..\..\Libraries\nlohmann\include;..\..\Libraries\nlohmann\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

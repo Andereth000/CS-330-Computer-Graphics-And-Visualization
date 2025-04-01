@@ -25,6 +25,14 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+// Nlohmann JSON Library for saving and loading scene data
+#include <json.hpp>
+
+// Filestream
+#include <fstream>
+
+using json = nlohmann::json;
+
 /***********************************************************
  *  SceneManager
  *
@@ -94,7 +102,7 @@ public:
 		bool isRotating = false;
 	};
 
-	// Add meshs to scene with various properties
+	// Add meshes to scene with various properties
 	void AddMeshToScene(std::string tag, glm::vec3 position, glm::vec3 rotation, 
 		glm::vec3 scale, std::string materialTag, 
 		std::string textureTag, glm::vec2 uvScale,
@@ -128,12 +136,28 @@ public:
 	std::vector<MESH_OBJECT> m_meshes;
 
 	// Load a 3D model from a file and process its meshes
-	void LoadModel(std::string filename, std::string tag, glm::vec3 position, glm::vec3 rotation,glm::vec3 scale);
-	void ProcessNode(aiNode* node, const aiScene* scene, std::string tag, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
-	void ProcessMesh(aiMesh* mesh, const aiScene* scene, std::string tag, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
+	void LoadModel(std::string filename, std::string tag, 
+		glm::vec3 position, glm::vec3 rotation,
+		glm::vec3 scale, std::string materialTag,
+		std::string textureTag, glm::vec2 uvScale,
+		glm::vec4 shaderColor, bool isRotating);
+	void ProcessNode(aiNode* node, const aiScene* scene, 
+		std::string tag, glm::vec3 position, 
+		glm::vec3 rotation, glm::vec3 scale,
+		std::string materialTag,
+		std::string textureTag, glm::vec2 uvScale,
+		glm::vec4 shaderColor, bool isRotating);
+	void ProcessMesh(aiMesh* mesh, const aiScene* scene, 
+		std::string tag, glm::vec3 position, glm::vec3 rotation, 
+		glm::vec3 scale, std::string materialTag,
+		std::string textureTag, glm::vec2 uvScale,
+		glm::vec4 shaderColor, bool isRotating);
 
 	// Infinite rotation boolean
 	bool isRotating = false;
+
+	void SerializeSceneData(std::string filename);
+	void DeserializeSceneData(std::string filename);
 
 private:
 	// pointer to shader manager object

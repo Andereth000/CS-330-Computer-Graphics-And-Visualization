@@ -299,19 +299,35 @@ void DrawImGui()
 	{
 		if (ImGui::Button("Stanford Bunny"))
 		{
-			g_SceneManager->LoadModel("../../Models/bunny.obj", "Stanford Bunny", glm::vec3(0.2f, 3.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+			g_SceneManager->LoadModel("../../Models/bunny.obj", "Stanford Bunny", 
+				glm::vec3(0.2f, 3.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), 
+				glm::vec3(1.0f, 1.0f, 1.0f), "default", 
+				"", glm::vec2(1.0f, 1.0f), glm::vec4(1.0), 
+				false);
 		}
 		if (ImGui::Button("Lucy"))
 		{
-			g_SceneManager->LoadModel("../../Models/lucy.obj", "Lucy", glm::vec3(0.2f, 3.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.5f, 1.5f, 1.5f));
+			g_SceneManager->LoadModel("../../Models/lucy.obj", "Lucy", 
+				glm::vec3(0.2f, 3.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), 
+				glm::vec3(1.5f, 1.5f, 1.5f), "default",
+				"", glm::vec2(1.0f, 1.0f), glm::vec4(1.0),
+				false);
 		}
 		if (ImGui::Button("Teapot"))
 		{
-			g_SceneManager->LoadModel("../../Models/teapot.obj", "Teapot", glm::vec3(0.2f, 3.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+			g_SceneManager->LoadModel("../../Models/teapot.obj", "Teapot", 
+				glm::vec3(0.2f, 3.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), 
+				glm::vec3(1.0f, 1.0f, 1.0f), "default",
+				"", glm::vec2(1.0f, 1.0f), glm::vec4(1.0),
+				false);
 		}
 		if (ImGui::Button("Suzanne"))
 		{
-			g_SceneManager->LoadModel("../../Models/suzanne.obj", "Suzanne", glm::vec3(0.2f, 4.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.5f, 1.5f, 1.5f));
+			g_SceneManager->LoadModel("../../Models/suzanne.obj", "Suzanne", 
+				glm::vec3(0.2f, 4.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), 
+				glm::vec3(1.5f, 1.5f, 1.5f), "default",
+				"", glm::vec2(1.0f, 1.0f), glm::vec4(1.0),
+				false);
 		}
 	}
 
@@ -384,6 +400,19 @@ void DrawImGui()
 		{
 			g_SceneManager->RemoveMesh(curMeshIndex);
 			curMeshIndex = std::max(0, curMeshIndex - 1);
+		}
+	}
+
+	if (ImGui::CollapsingHeader("Save/Load"))
+	{
+		if (ImGui::Button("Save Scene"))
+		{
+			g_SceneManager->SerializeSceneData("Saves/scene.json");
+			
+		}
+		if (ImGui::Button("Load Scene"))
+		{
+			g_SceneManager->DeserializeSceneData("Saves/scene.json");
 		}
 	}
 
