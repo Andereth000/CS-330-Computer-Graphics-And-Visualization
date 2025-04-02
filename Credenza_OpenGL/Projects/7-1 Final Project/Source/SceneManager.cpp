@@ -982,16 +982,7 @@ void SceneManager::DeserializeSceneData(std::string filename)
 				shaderColor, isRotating);
 			continue;
 		}
-		if (tag.find("Teapot") != std::string::npos)
-		{
-			LoadModel("../../Models/teapot.obj", tag,
-				position, rotation,
-				scale, materialTag,
-				textureTag, uvScale,
-				shaderColor, isRotating);
-			continue;
-		}
-		if (tag.find("Lucy") != std::string::npos)
+		else if (tag.find("Lucy") != std::string::npos)
 		{
 			LoadModel("../../Models/lucy.obj", tag,
 				position, rotation,
@@ -1000,7 +991,7 @@ void SceneManager::DeserializeSceneData(std::string filename)
 				shaderColor, isRotating);
 			continue;
 		}
-		if (tag.find("Suzanne") != std::string::npos)
+		else if (tag.find("Suzanne") != std::string::npos)
 		{
 			LoadModel("../../Models/suzanne.obj", tag,
 				position, rotation,
@@ -1008,7 +999,122 @@ void SceneManager::DeserializeSceneData(std::string filename)
 				textureTag, uvScale,
 				shaderColor, isRotating);
 			continue;
+		}  
+		else if (tag.find("Teapot") != std::string::npos)
+		{
+			LoadModel("../../Models/teapot.obj", tag,
+				position, rotation,
+				scale, materialTag,
+				textureTag, uvScale,
+				shaderColor, isRotating);
+			continue;
 		}
+		
+		// Retrive mesh data
+		MESH_OBJECT mesh;
+		mesh.tag = tag;
+		mesh.position = position;
+		mesh.rotation = rotation;
+		mesh.scale = scale;
+		mesh.materialTag = materialTag;
+		mesh.textureTag = textureTag;
+		mesh.uvScale = uvScale;
+		mesh.shaderColor = shaderColor;
+		mesh.isRotating = isRotating;
+
+		// Handle re-drawing basic meshes
+		if (tag.find("box") != std::string::npos)
+		{
+			AddMeshToScene(tag, position, 
+				rotation, scale, 
+				materialTag, textureTag, 
+				uvScale, shaderColor, 
+				[this]() { m_basicMeshes->DrawBoxMesh(); });
+			continue;
+		}
+		else if (tag.find("cone") != std::string::npos)
+		{
+			AddMeshToScene(tag, position,
+				rotation, scale,
+				materialTag, textureTag,
+				uvScale, shaderColor,
+				[this]() { m_basicMeshes->DrawConeMesh(); });
+			continue;
+		}
+		else if (tag.find("tapered cylinder") != std::string::npos)
+		{
+			AddMeshToScene(tag, position,
+				rotation, scale,
+				materialTag, textureTag,
+				uvScale, shaderColor,
+				[this]() { m_basicMeshes->DrawTaperedCylinderMesh(); });
+			continue;
+		}
+		else if (tag.find("cylinder") != std::string::npos)
+		{
+			AddMeshToScene(tag, position,
+				rotation, scale,
+				materialTag, textureTag,
+				uvScale, shaderColor,
+				[this]() { m_basicMeshes->DrawCylinderMesh(); });
+			continue;
+		}
+		else if (tag.find("plane") != std::string::npos)
+		{
+			AddMeshToScene(tag, position,
+				rotation, scale,
+				materialTag, textureTag,
+				uvScale, shaderColor,
+				[this]() { m_basicMeshes->DrawPlaneMesh(); });
+			continue;
+		}
+		else if (tag.find("prism") != std::string::npos)
+		{
+			AddMeshToScene(tag, position,
+				rotation, scale,
+				materialTag, textureTag,
+				uvScale, shaderColor,
+				[this]() { m_basicMeshes->DrawPrismMesh(); });
+			continue;
+		}
+		else if (tag.find("pyramid3") != std::string::npos)
+		{
+			AddMeshToScene(tag, position,
+				rotation, scale,
+				materialTag, textureTag,
+				uvScale, shaderColor,
+				[this]() { m_basicMeshes->DrawPyramid3Mesh(); });
+			continue;
+		}
+		else if (tag.find("pyramid4") != std::string::npos)
+		{
+			AddMeshToScene(tag, position,
+				rotation, scale,
+				materialTag, textureTag,
+				uvScale, shaderColor,
+				[this]() { m_basicMeshes->DrawPyramid4Mesh(); });
+			continue;
+		}
+		else if (tag.find("sphere") != std::string::npos)
+		{
+			AddMeshToScene(tag, position,
+				rotation, scale,
+				materialTag, textureTag,
+				uvScale, shaderColor,
+				[this]() { m_basicMeshes->DrawSphereMesh(); });
+			continue;
+		}
+		else if (tag.find("torus") != std::string::npos)
+		{
+			AddMeshToScene(tag, position,
+				rotation, scale,
+				materialTag, textureTag,
+				uvScale, shaderColor,
+				[this]() { m_basicMeshes->DrawTorusMesh(); });
+			continue;
+		}
+
+		m_meshes.push_back(mesh);
 
 	}
 }
