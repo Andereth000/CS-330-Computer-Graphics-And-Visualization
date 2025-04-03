@@ -910,6 +910,7 @@ void SceneManager::ProcessMesh(aiMesh* mesh, const aiScene* scene,
  *  SerializeSceneData()
  *
  *  This method is used for saving scene data to a file
+ *	(Reference: https://json.nlohmann.me/features/arbitrary_types/)
  ***********************************************************/
 void SceneManager::SerializeSceneData(std::string filename)
 {
@@ -943,6 +944,7 @@ void SceneManager::SerializeSceneData(std::string filename)
   *  DeserializeSceneData()
   *
   *  This method is used for loading scene data from a file
+  *	 (Reference: https://json.nlohmann.me/features/arbitrary_types/)
   ***********************************************************/
 void SceneManager::DeserializeSceneData(std::string filename)
 {
