@@ -22,7 +22,7 @@ They are not included in the GitHub repository due to size limitations.
 
 **Download them from this Google Drive folder:**
 
-➡️ [Download Libraries and DLLs](https://drive.google.com/drive/folder/your-shared-link)
+➡️ [Download Libraries and DLLs](https://drive.google.com/drive/folders/1e7LxHdDf2Xe31Ot5mpjnGtcvM-U3H7L7?usp=sharing)
 
 **Includes:**
 - assimp.zip
@@ -34,14 +34,16 @@ They are not included in the GitHub repository due to size limitations.
 
 Follow the steps below to build and run the enhanced OpenGL rendering engine with mesh editing, model loading, and scene saving and loading functionality.
 
-1. Clone the Repository  
+1. Clone the Repository
+
 Clone the repository from the `main` branch:
 
 ```bash
 git clone https://github.com/Andereth000/CS-330-Computer-Graphics-And-Visualization.git
 ```
 
-2. Add Required Library Dependencies  
+2. Add Required Library Dependencies
+   
 **Files Required:** Provided in Google Drive folder above
 
 Navigate to:
@@ -53,7 +55,8 @@ Replace the `GLEW` and `imgui` folders with the contents of the extracted `GLEW.
 
 (Note: Go up one directory from the extracted folder before copying.)
 
-3. Add the Models Folder  
+3. Add the Models Folder
+   
 **Files Required:** Included in Brightspace or external download
 
 Navigate to:
@@ -63,7 +66,8 @@ Navigate to:
 
 Paste the `Models` folder into this directory.
 
-4. Copy Required DLL Files  
+4. Copy Required DLL Files
+   
 **Files Required:** Included in Brightspace or download link
 
 From:
