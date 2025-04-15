@@ -55,7 +55,7 @@ Follow the steps below to build and run the enhanced OpenGL rendering engine wit
    > (Note: Go up one directory from the extracted folder before copying.)
 
 3. **Add the Models Folder**  
-   **Files Required:** Included in Brightspace or external download
+   **Files Required:** Provided in Google Drive folder
 
    Navigate to:
 
@@ -66,7 +66,7 @@ Follow the steps below to build and run the enhanced OpenGL rendering engine wit
    Paste the `Models` folder into this directory.
 
 4. **Copy Required DLL Files**  
-   **Files Required:** Included in Brightspace or download link
+   **Files Required:** Provided in Google Drive folder
 
    From:
 
