@@ -1,27 +1,62 @@
-# CS-330-Computer-Graphics-And-Visualization
+# CS-330: Computer Graphics and Visualization  
 OpenGL Credenza Scene With Capstone Enhancements
 
-![Project Preview 1](https://github.com/Andereth000/CS-330-Computer-Graphics-And-Visualization/blob/main/Images/Final_Project_1.png?raw=true)
+<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
 
-![Project Preview 2](https://github.com/Andereth000/CS-330-Computer-Graphics-And-Visualization/blob/main/Images/Final_Project_2.png?raw=true)
+  <img src="https://github.com/Andereth000/CS-330-Computer-Graphics-And-Visualization/blob/main/Images/Final_Project_1.png?raw=true" alt="Project Preview 1" style="width: 32%; max-width: 400px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
 
-# What new design skills has your work on the project helped you to craft?
-Working on this project has taught me a lot about structuring code for a robust API like OpenGL. By following the software design I was able to easily add new code and build upon my 3D scene, while keeping the code modular and readable.
+  <img src="https://github.com/Andereth000/CS-330-Computer-Graphics-And-Visualization/blob/main/Images/Final_Project_2.png?raw=true" alt="Project Preview 2" style="width: 32%; max-width: 400px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
 
-# What design process did you follow for your project work?
-My design process was done step by step, focusing on one step at a time. For example, I started by blocking out the scene and creating the meshes, then textures, and last materials and lighting. It was best if each step was completed before moving on to the next one. Then, once the whole system was in place I could make necessary changes to previous steps.
+  <img src="https://github.com/Andereth000/CS-330-Computer-Graphics-And-Visualization/blob/main/Images/Final_Project_3.png?raw=true" alt="Project Preview 3" style="width: 32%; max-width: 400px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
 
-# How could tactics from your design approach be applied in future work?
-Having to recreate the scene from reference images required me to understand how I could utilize OpenGL to create what I was envisioning. This required a lot of planning and some compromise when I couldn't figure out how to implement something, which forced me to think creatively. This type of planning and creative thinking will help me in the future if I get stuck somewhere in a project.
+  <img src="https://github.com/Andereth000/CS-330-Computer-Graphics-And-Visualization/blob/main/Images/Final_Project_4.png?raw=true" alt="Project Preview 4" style="width: 48%; max-width: 500px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
 
-# What new development strategies did you use while working on your 3D scene?
-Some new development strategies that I used while working on my scene were code organisation and modularity, iterative development, creative problem solving, and reading documentation. I have used all of these strategies before in smaller projects but never for a project of this scale.
+  <img src="https://github.com/Andereth000/CS-330-Computer-Graphics-And-Visualization/blob/main/Images/Final_Project_5.png?raw=true" alt="Project Preview 5" style="width: 48%; max-width: 500px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
 
-# How did iteration factor into your development?
-The whole process of building this 3D scene was iterative as I had to lay down the foundation for each step, one step at a time, before I could make a complete scene. I was also able to reuse code for different shapes and materials in order to create new ones.
+</div>
 
-# How has your approach to developing code evolved throughout the milestones, which led you to the project’s completion?
-My approach to developing code evolved throughout each milestone because I was forced to write the code as efficiently as possible so that I could meet the deadline. This made me consider organising my code to the best of my ability so that I could easily make changes to the scene. 
+## Enhanced Artifact Three Build Instructions
 
-# How do computational graphics and visualizations give you new knowledge and skills that can be applied in your future educational/professional pathway?
-Learning how to structure a large program with multiple files will definitely be useful in future work. Also, the mathematics and planning that goes into graphics and visualizations will carry over to many different projects that I may have in the future. Another thing that was very helpful is familiarizing myself with the OpenGL documentation and all of the functionality and uses that it has to offer. All of these new techniques will aid me in both the educational and professional pathways.
+--Enhanced Artifact Three Build Instructions--
+
+1. Clone Repository Branch - Run this command to clone the feature/feature-scene-saving branch:
+
+git clone --branch feature/feature-scene-saving --single-branch https://github.com/Andereth000/CS-330-Computer-Graphics-And-Visualization.git
+
+2.  Copy Library Dependencies - Files included in Brightspace submission
+
+Navigate to \CS-330-Computer-Graphics-And-Visualization\Credenza_OpenGL\Libraries
+
+Replace GLEW and imgui folders with extracted GLEW.zip and imgui.zip
+
+--Go up one directory before copying folder--
+
+3.  Copy Models Folder - Files included in Brightspace submission
+
+Navigate to \CS-330-Computer-Graphics-And-Visualization\Credenza_OpenGL
+
+Paste Models folder in this directory
+
+--Go up one directory before copying folder--
+
+4. Copy glew32.dll and assimp-vc143-mtd.dll - Files included in Brightspace submission
+
+Navigate to \GLEW\bin\Release\Win32 in extracted folder  
+Copy glew32.dll  
+
+Navigate to \CS-330-Computer-Graphics-And-Visualization\Credenza_OpenGL\Projects\7-1 Final Project  
+Paste glew32.dll in \7-1 Final Project  
+
+Navigate to \assimp\bin in extracted folder  
+Copy assimp-vc143-mtd.dll  
+
+Navigate to \CS-330-Computer-Graphics-And-Visualization\Credenza_OpenGL\Projects\7-1 Final Project  
+Paste assimp-vc143-mtd.dll in \7-1 Final Project
+
+5. Open Visual Studio Solution
+
+Navigate to \CS-330-Computer-Graphics-And-Visualization\Credenza_OpenGL\Projects\7-1 Final Project
+
+Open 7-1_FinalProjectMilestone.sln
+
+Run Debug x86 or Release x86!
