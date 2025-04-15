@@ -64,6 +64,7 @@ int curMeshIndex = -1;
  ***********************************************************/
 int main(int argc, char* argv[])
 {
+
 	// if GLFW fails initialization, then terminate the application
 	if (InitializeGLFW() == false)
 	{

@@ -20,8 +20,8 @@
 namespace
 {
 	// Variables for window width and height
-	const int WINDOW_WIDTH = 1920;
-	const int WINDOW_HEIGHT = 1080;
+	const int WINDOW_WIDTH = 1280;
+	const int WINDOW_HEIGHT = 720;
 	const char* g_ViewName = "view";
 	const char* g_ProjectionName = "projection";
 
@@ -265,6 +265,7 @@ void ViewManager::PrepareSceneView()
 
 	// define the current projection matrix
 	//projection = glm::perspective(glm::radians(g_pCamera->Zoom), (GLfloat)WINDOW_WIDTH / (GLfloat)WINDOW_HEIGHT, 0.1f, 100.0f);
+
 
 	if (bOrthographicProjection)
 	{
